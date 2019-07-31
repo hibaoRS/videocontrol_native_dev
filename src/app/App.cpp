@@ -17,6 +17,7 @@
 #include "App.h"
 #include <map>
 #include <string>
+#include "../../res/img/my_img_def.h"
 
 using namespace std;
 lv_obj_t *App::memory_label = NULL;
@@ -103,14 +104,27 @@ void App::readCpuMemoryEvent(lv_obj_t *obj, lv_event_t event) {
     }
 }
 
+//导航栏
 void App::create_navigation_bar(lv_obj_t *parent) {
-    //导航栏
-    lv_obj_t *list = lv_list_create(parent, NULL);
+    //导航栏容器
+    auto navigation_bar_cont = lv_cont_create(parent, NULL);
+    lv_cont_set_fit2(navigation_bar_cont, LV_FIT_FLOOD, LV_FIT_TIGHT);
+    lv_cont_set_layout(navigation_bar_cont, LV_LAYOUT_ROW_M);
+    //logo
+    auto icon = lv_img_create(navigation_bar_cont, NULL);
+    lv_img_set_src(icon, &logo);
+
+    //导航栏按钮
+    lv_obj_t *list = lv_list_create(navigation_bar_cont, NULL);
     lv_obj_set_style(list, &lv_style_transp_tight);
 
-    lv_cont_set_fit2(list, LV_FIT_FLOOD, LV_FIT_TIGHT);
-    lv_page_set_scrl_layout(list, LV_LAYOUT_ROW_T);
-//    lv_page_set_scrl_fit(list, LV_FIT_TIGHT);
+    lv_cont_set_fit2(list, LV_FIT_NONE, LV_FIT_TIGHT);
+    lv_list_set_style(list, LV_LIST_STYLE_SCRL, &lv_style_transp_tight);
+    lv_obj_set_width(list, lv_obj_get_width(parent) - lv_obj_get_width(icon));
+    lv_page_set_scrl_layout(list, LV_LAYOUT_ROW_M);
+    auto list_height = lv_obj_get_height(list) - 5;
+    //允许导航栏滚动
+    lv_page_set_scrl_fit(list, LV_FIT_TIGHT);
 
 
     //页面切换
@@ -139,7 +153,6 @@ void App::create_navigation_bar(lv_obj_t *parent) {
     memory_label = lv_list_get_btn_label(btn);
     lv_obj_set_width(memory_label, 250);
 
-    auto list_height = lv_obj_get_height(list) - 10;
 
     auto cont = lv_cont_create(list, NULL);
     lv_obj_set_height(cont, list_height);
