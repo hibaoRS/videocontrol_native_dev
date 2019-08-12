@@ -59,6 +59,8 @@ void App::init_app() {
     create_tabview(main_layout);
 
 
+    lv_tabview_set_tab_act(tab_view, 1, true);
+
 }
 
 void App::create_tabview(lv_obj_t *parent) {

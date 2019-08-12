@@ -16,7 +16,7 @@ public :
         init_layout();
     }
 
-protected:
+private:
     void init_layout() override;;
 
 };

@@ -18,7 +18,7 @@ private:
     lv_obj_t *menu;
     lv_obj_t *monitors;
 
-protected:
+private :
     void init_layout() override;;
 
     void init_monitors();
@@ -31,7 +31,6 @@ protected:
 
     void clear_monitors();
 
-private :
     lv_obj_t *create_monitor(lv_obj_t *parent, const char *name, lv_coord_t h);
 
     void create_menu(lv_obj_t *parent, const char *title);

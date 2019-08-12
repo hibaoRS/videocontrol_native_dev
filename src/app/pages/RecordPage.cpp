@@ -25,8 +25,8 @@ void RecordPage::init_monitors() {
     lv_obj_set_height(monitors, layoutHeight * (3.0 / 4));
     lv_obj_set_style(monitors, &lv_style_transp_tight);
 
+    init_center_monitors();
     init_left_right_monitors();
-//    init_center_monitors();
 }
 
 //初始化菜单栏
@@ -60,7 +60,7 @@ void RecordPage::init_left_right_monitors() {
     auto monitorsWidth = lv_obj_get_width(monitors);
     auto monitorsHeight = lv_obj_get_height(monitors);
 
-    auto *left = lv_cont_create(monitors, NULL);
+    auto left = lv_cont_create(monitors, NULL);
     lv_cont_set_fit2(left, LV_FIT_NONE, LV_FIT_FLOOD);
     lv_obj_set_width(left, monitorsWidth / 2);
     lv_obj_set_style(left, &lv_style_transp_tight);
@@ -68,7 +68,7 @@ void RecordPage::init_left_right_monitors() {
     //TODO 使用map存储各个监视器的坐标信息（value不为空则传过去）
     create_monitor(left, "主播", monitorsHeight);
 
-    auto *right = lv_cont_create(monitors, NULL);
+    auto right = lv_cont_create(monitors, NULL);
     lv_obj_set_style(right, &lv_style_transp_tight);
     lv_cont_set_fit2(right, LV_FIT_NONE, LV_FIT_FLOOD);
     lv_obj_set_width(right, monitorsWidth / 2);
@@ -76,7 +76,7 @@ void RecordPage::init_left_right_monitors() {
 
     auto right_width = lv_obj_get_width(right);
 
-    auto *right_left = lv_cont_create(right, NULL);
+    auto right_left = lv_cont_create(right, NULL);
     lv_cont_set_fit2(right_left, LV_FIT_NONE, LV_FIT_FLOOD);
     lv_obj_set_width(right_left, right_width / 2);
 
@@ -88,7 +88,7 @@ void RecordPage::init_left_right_monitors() {
     create_monitor(right_left, "学生全景", monitorsHeight / 3);
 
 
-    auto *right_right = lv_cont_create(right, NULL);
+    auto right_right = lv_cont_create(right, NULL);
     lv_obj_set_style(right_right, &lv_style_transp_tight);
     lv_cont_set_fit2(right_right, LV_FIT_NONE, LV_FIT_FLOOD);
     lv_obj_set_width(right_right, right_width / 2);
@@ -105,12 +105,7 @@ void RecordPage::init_left_right_monitors() {
 
 //移除布局
 void RecordPage::clear_monitors() {
-    lv_obj_t *child;
-    child = lv_obj_get_child(monitors, NULL);
-    while (child) {
-        lv_obj_del(child);
-        child = lv_obj_get_child(monitors, NULL);
-    }
+    lv_obj_clean(monitors);
 }
 
 /**
@@ -142,14 +137,14 @@ void RecordPage::init_center_monitors() {
     auto monitorsWidth = lv_obj_get_width(monitors);
     auto monitorsHeight = lv_obj_get_height(monitors);
 
-    auto *left = lv_cont_create(monitors, NULL);
+    auto left = lv_cont_create(monitors, NULL);
     lv_cont_set_fit2(left, LV_FIT_NONE, LV_FIT_FLOOD);
     lv_obj_set_width(left, monitorsWidth / 2);
     lv_obj_set_style(left, &lv_style_transp_tight);
 
     create_monitor(left, "主播", monitorsHeight);
 
-    auto *right = lv_cont_create(monitors, NULL);
+    auto right = lv_cont_create(monitors, NULL);
     lv_obj_set_style(right, &lv_style_transp_tight);
     lv_cont_set_fit2(right, LV_FIT_NONE, LV_FIT_FLOOD);
     lv_obj_set_width(right, monitorsWidth / 2);

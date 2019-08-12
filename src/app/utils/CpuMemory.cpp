@@ -4,6 +4,7 @@
 
 #include "CpuMemory.h"
 #include "StringUtils.h"
+#include "ShellUtils.h"
 
 CpuMemory *CpuMemory::self = NULL;
 
@@ -113,21 +114,14 @@ void CpuMemory::read_cpu_memory_data(FILE *pFile) {
 }
 
 void CpuMemory::check_device() {
-    FILE *fp;
-    fp = popen("df -h", "r");
+    popen("df -h", "r");
 
-    char buf[2048];
     map<string, string> devices;
     int usb_num = 1;
-    while (true) {
-        memset(buf, '\0', sizeof(buf));  //初始化buf,以免后面写入乱码到文件中
-        /* 若命令没有结束则fgets会等待,逐行读取文件 */
-        if (fgets(buf, sizeof(buf), fp) == NULL) {
-            break;
-        }
+    ShellUtils::execute("df -h",[&](const char * buf){
         string s(buf);
         if (StringUtils::StartsWithNoCase(s, "Filesystem")) {
-            continue;
+            return;
         }
 #if __arm__
             else if (StringUtils::StartsWithNoCase(s, "/dev/sda")) {
@@ -144,8 +138,7 @@ void CpuMemory::check_device() {
             get_device_info(name, &devices, s);
             usb_num++;
         }
-    }
-    pclose(fp);
+    });
 
     vector<string> v;
     auto it = devices.begin();
@@ -161,7 +154,7 @@ void CpuMemory::get_device_info(const char *chs, map<string, string> *map, strin
     list.erase(std::remove_if(
             list.begin(), list.end(),
             [](const string &s) {
-                return s == "";
+                return s.empty();
             }), list.end());
     string val = list.at(4) + " " + list.at(2) + "/" + list.at(1);
     if (chs != NULL) {
