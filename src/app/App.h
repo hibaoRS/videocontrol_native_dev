@@ -5,6 +5,9 @@
 #ifndef LVGL_APP_H
 #define LVGL_APP_H
 
+#include <string>
+
+using std::string;
 
 class App {
 public:
@@ -13,15 +16,14 @@ public:
 
 private:
     void create_tabview(lv_obj_t *parent);
-
     static void switch_page(lv_obj_t *btn, lv_event_t event);
-
     void create_navigation_bar(lv_obj_t *parent);
 
     static lv_obj_t *memory_label;
     static lv_obj_t *cpu_label;
     static lv_obj_t *devices_ddlist;
     static lv_obj_t *tab_view;
+    static string curr_devices;
 
     static void readCpuMemoryEvent(lv_obj_t *obj, lv_event_t event);
 };

@@ -24,6 +24,7 @@ lv_obj_t *App::memory_label = NULL;
 lv_obj_t *App::cpu_label = NULL;
 lv_obj_t *App::devices_ddlist = NULL;
 lv_obj_t *App::tab_view = NULL;
+string App::curr_devices = "";
 
 
 void App::init_app() {
@@ -96,12 +97,17 @@ void App::readCpuMemoryEvent(lv_obj_t *obj, lv_event_t event) {
         lv_label_set_text(memory_label, s);
     }
     if (devices_ddlist != NULL) {
+        /**
         auto ext = (lv_ddlist_ext_t *) lv_obj_get_ext_attr(devices_ddlist);
         //设备下拉框没有打开，则重新刷新数据
         if (!ext->opened) {
             auto index = ext->sel_opt_id;
             lv_ddlist_set_options(devices_ddlist, m["devices"].c_str());
             lv_ddlist_set_selected(devices_ddlist, index);
+        }**/
+        if (m["devices"] != curr_devices) {
+            curr_devices = m["devices"];
+            lv_roller_set_options(devices_ddlist, curr_devices.c_str(), LV_ROLLER_MODE_INIFINITE);
         }
     }
 }
@@ -161,9 +167,13 @@ void App::create_navigation_bar(lv_obj_t *parent) {
     lv_cont_set_layout(cont, LV_LAYOUT_CENTER);
     lv_cont_set_fit2(cont, LV_FIT_TIGHT, LV_FIT_NONE);
     lv_obj_set_style(cont, &lv_style_transp_fit);
-    devices_ddlist = lv_ddlist_create(cont, NULL);
-    lv_ddlist_set_style(devices_ddlist, LV_DDLIST_STYLE_BG, lv_obj_get_style(btn));
-    lv_ddlist_set_fix_height(devices_ddlist, list_height);
+//    devices_ddlist = lv_ddlist_create(cont, NULL);
+//    lv_ddlist_set_style(devices_ddlist, LV_DDLIST_STYLE_BG, lv_obj_get_style(btn));
+//    lv_ddlist_set_fix_height(devices_ddlist, list_height);
+
+    devices_ddlist = lv_roller_create(cont, NULL);
+    lv_roller_set_style(devices_ddlist, LV_ROLLER_STYLE_BG, lv_obj_get_style(btn));
+    lv_obj_set_height(devices_ddlist, list_height * 3);
 
     lv_obj_set_event_cb(CpuMemory::Instance()->obj, readCpuMemoryEvent);
 

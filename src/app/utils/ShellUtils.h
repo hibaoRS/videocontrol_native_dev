@@ -11,7 +11,7 @@ using std::string;
 
 class ShellUtils {
 public :
-    static void execute(const string& cmd, std::function<void(const char *)> handler);
+    static int execute(const string& cmd, std::function<void(const char *)> handler);
 
 };
 

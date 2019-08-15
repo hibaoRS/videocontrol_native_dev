@@ -5,7 +5,7 @@
 #include <cstring>
 #include "ShellUtils.h"
 
-void ShellUtils::execute(const string& cmd, std::function<void(const char *)> handler) {
+int ShellUtils::execute(const string& cmd, std::function<void(const char *)> handler) {
     FILE *fp= popen(cmd.c_str(), "r");
     char buf[2048];
     while (true) {
@@ -17,5 +17,5 @@ void ShellUtils::execute(const string& cmd, std::function<void(const char *)> ha
         //调用lambda函数
         handler(buf);
     }
-    pclose(fp);
+    return pclose(fp);
 }
