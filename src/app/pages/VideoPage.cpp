@@ -72,9 +72,10 @@ void VideoPage::create_file_explorer() {
     auto btn = lv_btn_create(copy_info_area, NULL);
     label = lv_label_create(btn, NULL);
     lv_label_set_text(label, "粘贴");
+    lv_obj_set_event_cb(btn, paste_cb);
 
     btn = lv_btn_create(copy_info_area, NULL);
-    lv_obj_set_event_cb(copy_info_area,)
+    lv_obj_set_event_cb(btn, cancel_copy_cb);
     label = lv_label_create(btn, NULL);
     lv_label_set_text(label, "取消");
 
@@ -229,6 +230,60 @@ void VideoPage::flush_file_info() {
         lv_label_set_text(copy_link_label, copy_link->c_str());
     }
     lv_label_set_text(curr_folder_label, curr_dir->c_str());
+}
+
+void VideoPage::cancel_copy_cb(lv_obj_t *btn, lv_event_t event) {
+    if (event == LV_EVENT_CLICKED) {
+        *pThis->copy_link = "";
+        pThis->flush_file_info();
+    }
+
+}
+
+void VideoPage::paste_cb(lv_obj_t *btn, lv_event_t event) {
+    if (event == LV_EVENT_CLICKED) {
+        if (true) {
+            static lv_style_t modal_style;
+            /* Create a full-screen background */
+            lv_style_copy(&modal_style, &lv_style_plain_color);
+
+            /* Set the background's style */
+            modal_style.body.main_color = modal_style.body.grad_color = LV_COLOR_BLACK;
+            modal_style.body.opa = LV_OPA_50;
+
+            /* Create a base object for the modal background */
+            lv_obj_t *obj = lv_obj_create(lv_scr_act(), NULL);
+            lv_obj_set_style(obj, &modal_style);
+            lv_obj_set_pos(obj, 0, 0);
+            lv_obj_set_size(obj, LV_HOR_RES, LV_VER_RES);
+            lv_obj_set_opa_scale_enable(obj, true); /* Enable opacity scaling for the animation */
+
+            static const char * btns2[] = {"确定"};
+
+            /* Create the message box as a child of the modal background */
+            auto mbox = lv_mbox_create(obj, NULL);
+            lv_mbox_add_btns(mbox, btns2);
+            lv_mbox_set_text(mbox, "Hello world!");
+            lv_obj_align(mbox, NULL, LV_ALIGN_CENTER, 0, 0);
+//            lv_obj_set_event_cb(mbox, mbox_event_cb);
+
+            /* Fade the message box in with an animation */
+            lv_anim_t a;
+            lv_anim_init(&a);
+            lv_anim_set_time(&a, 500, 0);
+            lv_anim_set_values(&a, LV_OPA_TRANSP, LV_OPA_COVER);
+            lv_anim_set_exec_cb(&a, obj, (lv_anim_exec_xcb_t)lv_obj_set_opa_scale);
+            lv_anim_create(&a);
+
+        }
+        int result = ShellUtils::execute("", [&](const char *line) {
+
+        });
+        //操作失败
+        if (result != 0) {
+
+        }
+    }
 }
 
 

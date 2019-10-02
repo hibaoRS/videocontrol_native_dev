@@ -58,8 +58,11 @@ private:
     static void file_click_cb(lv_obj_t *btn, lv_event_t event);
 
     static void copy_file_cb(lv_obj_t *btn, lv_event_t event);
+    static void cancel_copy_cb(lv_obj_t *btn, lv_event_t event);
+    static void paste_cb(lv_obj_t *btn, lv_event_t event);
 
     void flush_file_info();
+
 };
 
 
